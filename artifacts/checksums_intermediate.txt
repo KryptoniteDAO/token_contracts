@@ -1,3 +1,4 @@
 11fb472d51b99b8918310ab672da28216bee110e6830bf64ac66fd212de4b331  target/wasm32-unknown-unknown/release/kpt.wasm
-8f6228a18dcba8805cc151bcd12749ab57acd6e4ad802d3296c61e0c39209cac  target/wasm32-unknown-unknown/release/kpt_distribute.wasm
 b83a547122217fbbc1367fd884c8b5c9941d0c01fbf556b0b663f49c72d77d58  target/wasm32-unknown-unknown/release/ve_kpt.wasm
+4e11d875942dd79a4d8c68180e7bc0aa64bb93e8fd4e5976254cf45ecec12da6  target/wasm32-unknown-unknown/release/distribute.wasm
+08f20c86efb14189bc467566f240207e3f61f9a77a2c9c3a0dfcb3288a49e21a  target/wasm32-unknown-unknown/release/seilor.wasm

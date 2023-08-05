@@ -81,8 +81,8 @@ mod tests {
 
         // Negative test case with insufficient permissions
         let _msg = ExecuteMsg::UpdateConfig {
-            kpt_fund: Some(Addr::unchecked("new_kpt_fund")),
-            kpt_distribute: Some(Addr::unchecked("new_kpt_distribute")),
+            kpt_fund: Some(Addr::unchecked("new_seilor_fund")),
+            kpt_distribute: Some(Addr::unchecked("new_seilor_distribute")),
             gov: Some(Addr::unchecked("new_gov")),
         };
         let _info = mock_info("random_user", &[]);
@@ -105,8 +105,8 @@ mod tests {
 
         // Positive test case
         let _msg = ExecuteMsg::UpdateConfig {
-            kpt_fund: Some(Addr::unchecked("new_kpt_fund")),
-            kpt_distribute: Some(Addr::unchecked("new_kpt_distribute")),
+            kpt_fund: Some(Addr::unchecked("new_seilor_fund")),
+            kpt_distribute: Some(Addr::unchecked("new_seilor_distribute")),
             gov: Some(Addr::unchecked("new_gov")),
         };
         let _info = mock_info("creator", &[]);
@@ -119,15 +119,15 @@ mod tests {
             KptConfigResponse {
                 max_supply,
                 gov: Addr::unchecked("new_gov"),
-                kpt_fund: Addr::unchecked("new_kpt_fund"),
-                kpt_distribute: Addr::unchecked("new_kpt_distribute"),
+                kpt_fund: Addr::unchecked("new_seilor_fund"),
+                kpt_distribute: Addr::unchecked("new_seilor_distribute"),
             }
         );
 
         // Verify old gov with insufficient permissions
         let _msg = ExecuteMsg::UpdateConfig {
-            kpt_fund: Some(Addr::unchecked("new_kpt_fund")),
-            kpt_distribute: Some(Addr::unchecked("new_kpt_distribute")),
+            kpt_fund: Some(Addr::unchecked("new_seilor_fund")),
+            kpt_distribute: Some(Addr::unchecked("new_seilor_distribute")),
             gov: Some(Addr::unchecked("new_gov")),
         };
         let _info = mock_info("creator", &[]);
@@ -178,8 +178,8 @@ mod tests {
 
         // proper update config
         let _msg = ExecuteMsg::UpdateConfig {
-            kpt_fund: Some(Addr::unchecked("new_kpt_fund".to_string())),
-            kpt_distribute: Some(Addr::unchecked("new_kpt_distribute".to_string())),
+            kpt_fund: Some(Addr::unchecked("new_seilor_fund".to_string())),
+            kpt_distribute: Some(Addr::unchecked("new_seilor_distribute".to_string())),
             gov: Some(Addr::unchecked("new_gov".to_string())),
         };
         let _info = mock_info("creator", &[]);
@@ -220,7 +220,7 @@ mod tests {
             contract: None,
             msg: None,
         };
-        let _info = mock_info("new_kpt_fund", &[]);
+        let _info = mock_info("new_seilor_fund", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap();
         assert_eq!(0, _res.messages.len());
 
@@ -232,7 +232,7 @@ mod tests {
             contract: None,
             msg: None,
         };
-        let _info = mock_info("new_kpt_distribute", &[]);
+        let _info = mock_info("new_seilor_distribute", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap();
         assert_eq!(0, _res.messages.len());
 
@@ -253,8 +253,8 @@ mod tests {
 
         // proper update config
         let _msg = ExecuteMsg::UpdateConfig {
-            kpt_fund: Some(Addr::unchecked("new_kpt_fund".to_string())),
-            kpt_distribute: Some(Addr::unchecked("new_kpt_distribute".to_string())),
+            kpt_fund: Some(Addr::unchecked("new_seilor_fund".to_string())),
+            kpt_distribute: Some(Addr::unchecked("new_seilor_distribute".to_string())),
             gov: Some(Addr::unchecked("creator".to_string())),
         };
         let _info = mock_info("creator", &[]);
@@ -268,7 +268,7 @@ mod tests {
             contract: None,
             msg: None,
         };
-        let _info = mock_info("new_kpt_fund", &[]);
+        let _info = mock_info("new_seilor_fund", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap();
         assert_eq!(0, _res.messages.len());
 
@@ -290,7 +290,7 @@ mod tests {
             user: "lucky".to_string(),
             amount,
         };
-        let _info = mock_info("new_kpt_distribute", &[]);
+        let _info = mock_info("new_seilor_distribute", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg);
         match _res {
             Err(ContractError::Unauthorized {}) => {}
@@ -302,7 +302,7 @@ mod tests {
             user: "lucky".to_string(),
             amount,
         };
-        let _info = mock_info("new_kpt_fund", &[]);
+        let _info = mock_info("new_seilor_fund", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap();
         assert_eq!(0, _res.messages.len());
 

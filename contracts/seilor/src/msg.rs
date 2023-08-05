@@ -15,9 +15,9 @@ pub struct InstantiateMsg {
 #[cw_serde]
 pub enum ExecuteMsg {
     UpdateConfig {
-        kpt_fund: Option<Addr>,
+        seilor_fund: Option<Addr>,
         gov: Option<Addr>,
-        kpt_distribute: Option<Addr>,
+        seilor_distribute: Option<Addr>,
     },
     Mint {
         recipient: String,
@@ -91,8 +91,8 @@ pub enum ExecuteMsg {
 #[cw_serde]
 #[derive(QueryResponses)]
 pub enum QueryMsg {
-    #[returns(KptConfigResponse)]
-    KptConfig {},
+    #[returns(SeilorConfigResponse)]
+    SeilorConfig {},
 
     /// Returns the current balance of the given address, 0 if unset.
     #[returns(cw20::BalanceResponse)]
@@ -144,15 +144,15 @@ pub enum QueryMsg {
 }
 
 #[cw_serde]
-pub enum KptFundMsg {
+pub enum SeilorFundMsg {
     RefreshReward { user: Addr },
 }
 
 #[cw_serde]
-pub struct KptConfigResponse {
+pub struct SeilorConfigResponse {
     pub max_supply: u128,
-    pub kpt_fund: Addr,
-    pub kpt_distribute: Addr,
+    pub seilor_fund: Addr,
+    pub seilor_distribute: Addr,
     pub gov: Addr,
 }
 

@@ -1,8 +1,8 @@
 use cw20_base::ContractError;
 use crate::handler::{burn, mint, update_config};
 use crate::msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMsg};
-use crate::querier::query_kpt_config;
-use crate::state::{store_kpt_config, KptConfig};
+use crate::querier::query_seilor_config;
+use crate::state::{store_seilor_config, SeilorConfig};
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{
@@ -24,7 +24,7 @@ use cw20_base::enumerable::{query_all_accounts, query_owner_allowances, query_sp
 use cw20_base::msg::{InstantiateMarketingInfo, InstantiateMsg as Cw20InstantiateMsg};
 
 // version info for migration info
-const CONTRACT_NAME: &str = "kryptonite.finance:cw20-kpt";
+const CONTRACT_NAME: &str = "kryptonite.finance:cw20-seilor";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -57,14 +57,14 @@ pub fn instantiate(
         return Err(ContractError::Std(StdError::generic_err(err.to_string())));
     }
 
-    let kpt_config = KptConfig {
+    let seilor_config = SeilorConfig {
         max_supply: msg.max_supply,
-        kpt_fund: Addr::unchecked(""),
+        seilor_fund: Addr::unchecked(""),
         gov,
-        kpt_distribute: Addr::unchecked(""),
+        seilor_distribute: Addr::unchecked(""),
     };
 
-    store_kpt_config(deps.storage, &kpt_config)?;
+    store_seilor_config(deps.storage, &seilor_config)?;
 
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
 
@@ -80,10 +80,10 @@ pub fn execute(
 ) -> Result<Response, ContractError> {
     match msg {
         ExecuteMsg::UpdateConfig {
-            kpt_fund,
+            seilor_fund,
             gov,
-            kpt_distribute,
-        } => update_config(deps, info, kpt_fund, gov, kpt_distribute),
+            seilor_distribute,
+        } => update_config(deps, info, seilor_fund, gov, seilor_distribute),
         ExecuteMsg::Mint {
             recipient,
             amount,
@@ -159,7 +159,7 @@ pub fn execute(
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
         // custom queries
-        QueryMsg::KptConfig {} => to_binary(&query_kpt_config(deps)?),
+        QueryMsg::SeilorConfig {} => to_binary(&query_seilor_config(deps)?),
 
         QueryMsg::Balance { address } => to_binary(&query_balance(deps, address)?),
         QueryMsg::TokenInfo {} => to_binary(&query_token_info(deps)?),

@@ -62,7 +62,7 @@ pub fn claim(
     let mut cosmos_msgs = vec![];
     if claim_amount > 0u128 {
         // send the claim amount to user
-        let kpt_mint_msg = kpt::msg::ExecuteMsg::Mint {
+        let seilor_mint_msg = seilor::msg::ExecuteMsg::Mint {
             recipient: claim_user.clone().to_string(),
             amount: Uint128::from(claim_amount.clone()),
             contract: Option::from(claim_user.clone().to_string()),
@@ -70,7 +70,7 @@ pub fn claim(
         };
         let mint_msg = CosmosMsg::Wasm(WasmMsg::Execute {
             contract_addr: distribute_config.distribute_token.to_string(),
-            msg: to_binary(&kpt_mint_msg)?,
+            msg: to_binary(&seilor_mint_msg)?,
             funds: vec![],
         });
         cosmos_msgs.push(mint_msg);

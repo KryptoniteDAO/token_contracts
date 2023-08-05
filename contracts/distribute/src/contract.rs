@@ -15,7 +15,7 @@ use cosmwasm_std::{
 use cw2::set_contract_version;
 
 // version info for migration info
-const CONTRACT_NAME: &str = "kryptonite.finance:kpt-distribute";
+const CONTRACT_NAME: &str = "kryptonite.finance:seilor-distribute";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[cfg_attr(not(feature = "library"), entry_point)]

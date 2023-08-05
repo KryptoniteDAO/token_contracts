@@ -1,20 +1,20 @@
 use cw20_base::ContractError;
 use crate::helper::is_empty_str;
 use crate::mint_receiver::Cw20MintReceiveMsg;
-use crate::state::{read_kpt_config, store_kpt_config};
+use crate::state::{read_seilor_config, store_seilor_config};
 use cosmwasm_std::{attr, Addr, Binary, DepsMut, Env, MessageInfo, Response, StdError, Uint128};
 use cw20_base::contract::{execute_burn, execute_mint};
 
 pub fn update_config(
     deps: DepsMut,
     info: MessageInfo,
-    kpt_fund: Option<Addr>,
+    seilor_fund: Option<Addr>,
     gov: Option<Addr>,
-    kpt_distribute: Option<Addr>,
+    seilor_distribute: Option<Addr>,
 ) -> Result<Response, ContractError> {
-    let mut kpt_config = read_kpt_config(deps.storage)?;
+    let mut seilor_config = read_seilor_config(deps.storage)?;
 
-    if info.sender != kpt_config.gov {
+    if info.sender != seilor_config.gov {
         return Err(ContractError::Unauthorized {});
     }
 
@@ -23,20 +23,20 @@ pub fn update_config(
         attr("sender", info.sender.to_string()),
     ];
 
-    if let Some(kpt_fund) = kpt_fund {
-        kpt_config.kpt_fund = kpt_fund.clone();
-        attrs.push(attr("kpt_fund", kpt_fund.to_string()));
+    if let Some(seilor_fund) = seilor_fund {
+        seilor_config.seilor_fund = seilor_fund.clone();
+        attrs.push(attr("seilor_fund", seilor_fund.to_string()));
     }
     if let Some(gov) = gov {
-        kpt_config.gov = gov.clone();
+        seilor_config.gov = gov.clone();
         attrs.push(attr("gov", gov.to_string()));
     }
-    if let Some(kpt_distribute) = kpt_distribute {
-        kpt_config.kpt_distribute = kpt_distribute.clone();
-        attrs.push(attr("kpt_distribute", kpt_distribute.to_string()));
+    if let Some(seilor_distribute) = seilor_distribute {
+        seilor_config.seilor_distribute = seilor_distribute.clone();
+        attrs.push(attr("seilor_distribute", seilor_distribute.to_string()));
     }
 
-    store_kpt_config(deps.storage, &kpt_config)?;
+    store_seilor_config(deps.storage, &seilor_config)?;
 
     Ok(Response::new().add_attributes(attrs))
 }
@@ -51,15 +51,15 @@ pub fn mint(
     msg: Option<Binary>,
 ) -> Result<Response, ContractError> {
     let msg_sender = info.sender;
-    let kpt_config = read_kpt_config(deps.storage)?;
-    let kpt_fund = kpt_config.kpt_fund;
-    let kpt_distribute = kpt_config.kpt_distribute;
+    let seilor_config = read_seilor_config(deps.storage)?;
+    let seilor_fund = seilor_config.seilor_fund;
+    let seilor_distribute = seilor_config.seilor_distribute;
 
-    if is_empty_str(kpt_fund.as_str()) && is_empty_str(kpt_distribute.as_str()) {
+    if is_empty_str(seilor_fund.as_str()) && is_empty_str(seilor_distribute.as_str()) {
         return Err(ContractError::Std(StdError::generic_err("mint contract not configured")));
     }
 
-    if msg_sender.ne(&kpt_fund.clone()) && msg_sender.ne(&kpt_distribute) {
+    if msg_sender.ne(&seilor_fund.clone()) && msg_sender.ne(&seilor_distribute) {
         return Err(ContractError::Unauthorized {});
     }
 
@@ -106,11 +106,11 @@ pub fn burn(
     user: Addr,
     amount: u128,
 ) -> Result<Response, ContractError> {
-    let kpt_config = read_kpt_config(deps.storage)?;
+    let seilor_config = read_seilor_config(deps.storage)?;
     let msg_sender = info.sender;
-    let kpt_fund = kpt_config.kpt_fund;
+    let seilor_fund = seilor_config.seilor_fund;
 
-    if msg_sender != kpt_fund.clone() {
+    if msg_sender != seilor_fund.clone() {
         return Err(ContractError::Unauthorized {});
     }
 
