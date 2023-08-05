@@ -11,27 +11,27 @@
         "update_config": {
           "type": "object",
           "properties": {
+            "distribute": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/Addr"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "fund": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/Addr"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
             "gov": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Addr"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "seilor_distribute": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Addr"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "seilor_fund": {
               "anyOf": [
                 {
                   "$ref": "#/definitions/Addr"

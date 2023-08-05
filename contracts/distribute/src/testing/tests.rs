@@ -6,11 +6,11 @@ use crate::testing::mock_fn::{mock_instantiate, mock_instantiate_msg};
 use cosmwasm_std::testing::mock_info;
 use cosmwasm_std::{Addr, StdError};
 
-const KPT_TOKEN: &str = "kpt_token";
+const SEILOR_TOKEN: &str = "seilor_token";
 
 #[test]
 fn test_instantiate() {
-    let mut msg = mock_instantiate_msg(Addr::unchecked(KPT_TOKEN));
+    let mut msg = mock_instantiate_msg(Addr::unchecked(SEILOR_TOKEN));
     let (_, _, _, res) = mock_instantiate(msg.clone());
     assert!(res.is_ok());
 
@@ -25,7 +25,7 @@ fn test_instantiate() {
 
 #[test]
 fn test_update_config() {
-    let msg = mock_instantiate_msg(Addr::unchecked(KPT_TOKEN));
+    let msg = mock_instantiate_msg(Addr::unchecked(SEILOR_TOKEN));
     let (mut deps, _, info, res) = mock_instantiate(msg.clone());
     assert!(res.is_ok());
 
@@ -53,7 +53,7 @@ fn test_update_config() {
 
 #[test]
 fn test_update_rule_config() {
-    let msg = mock_instantiate_msg(Addr::unchecked(KPT_TOKEN));
+    let msg = mock_instantiate_msg(Addr::unchecked(SEILOR_TOKEN));
     let (mut deps, _, info, res) = mock_instantiate(msg.clone());
     assert!(res.is_ok());
 
@@ -79,7 +79,7 @@ fn test_update_rule_config() {
 
 #[test]
 fn test_add_rule_config() {
-    let mut msg = mock_instantiate_msg(Addr::unchecked(KPT_TOKEN));
+    let mut msg = mock_instantiate_msg(Addr::unchecked(SEILOR_TOKEN));
 
     msg.rule_configs_map.insert(
         "team".to_string(),
@@ -108,7 +108,7 @@ fn test_add_rule_config() {
     assert_eq!(query_data.rule_config.rule_total_amount, 100);
 
     let config = query_config(deps.as_ref()).unwrap();
-    assert_eq!(config.rules_total_amount, 880000000000100u128);
+    assert_eq!(config.rules_total_amount, 800000000000100u128);
 
     let res = add_rule_config(
         deps.as_mut(),
@@ -137,9 +137,9 @@ fn test_add_rule_config() {
     assert_eq!(query_data.rule_config.rule_total_amount, 100);
 
     let config = query_config(deps.as_ref()).unwrap();
-    assert_eq!(config.rules_total_amount, 880000000000200u128);
+    assert_eq!(config.rules_total_amount, 800000000000200u128);
 
-    let msg = mock_instantiate_msg(Addr::unchecked(KPT_TOKEN));
+    let msg = mock_instantiate_msg(Addr::unchecked(SEILOR_TOKEN));
     let (mut deps, _, info, res) = mock_instantiate(msg.clone());
     assert!(res.is_ok());
 

@@ -1,17 +1,17 @@
 #[cfg(test)]
 mod tests {
-
     use crate::contract::{execute, instantiate};
-    use cw20_base::ContractError;
     use crate::msg::{ExecuteMsg, InstantiateMsg, SeilorConfigResponse};
     use crate::querier::query_seilor_config;
     use cosmwasm_std::testing::{
         mock_dependencies, mock_dependencies_with_balance, mock_env, mock_info,
     };
-    use cosmwasm_std::{coins, Addr, Deps, Response, Uint128, StdError};
+    use cosmwasm_std::StdError::GenericErr;
+    use cosmwasm_std::{coins, Addr, Deps, Response, Uint128};
     use cw20_base::contract::query_balance;
     use cw20_base::msg::InstantiateMarketingInfo;
     use cw20_base::msg::InstantiateMsg as Cw20InstantiateMsg;
+    use cw20_base::ContractError;
 
     fn get_balance<T: Into<String>>(deps: Deps, address: T) -> Uint128 {
         query_balance(deps, address.into()).unwrap().balance
@@ -56,14 +56,14 @@ mod tests {
         let _res = instantiate(deps.as_mut(), mock_env(), _info, _msg).unwrap();
         assert_eq!(_res, Response::default());
 
-        // Verify the KptConfig is stored correctly
+        // Verify the SeilorConfig is stored correctly
         assert_eq!(
             query_seilor_config(deps.as_ref()).unwrap(),
             SeilorConfigResponse {
                 max_supply,
                 gov: Addr::unchecked("gov"),
-                seilor_fund: Addr::unchecked(""),
-                seilor_distribute: Addr::unchecked(""),
+                fund: Addr::unchecked(""),
+                distribute: Addr::unchecked(""),
             }
         );
     }
@@ -81,8 +81,8 @@ mod tests {
 
         // Negative test case with insufficient permissions
         let _msg = ExecuteMsg::UpdateConfig {
-            seilor_fund: Some(Addr::unchecked("new_seilor_fund")),
-            seilor_distribute: Some(Addr::unchecked("new_seilor_distribute")),
+            fund: Some(Addr::unchecked("new_fund")),
+            distribute: Some(Addr::unchecked("new_distribute")),
             gov: Some(Addr::unchecked("new_gov")),
         };
         let _info = mock_info("random_user", &[]);
@@ -98,15 +98,15 @@ mod tests {
             SeilorConfigResponse {
                 max_supply,
                 gov: Addr::unchecked("creator"),
-                seilor_fund: Addr::unchecked(""),
-                seilor_distribute: Addr::unchecked(""),
+                fund: Addr::unchecked(""),
+                distribute: Addr::unchecked(""),
             }
         );
 
         // Positive test case
         let _msg = ExecuteMsg::UpdateConfig {
-            seilor_fund: Some(Addr::unchecked("new_seilor_fund")),
-            seilor_distribute: Some(Addr::unchecked("new_seilor_distribute")),
+            fund: Some(Addr::unchecked("new_fund")),
+            distribute: Some(Addr::unchecked("new_distribute")),
             gov: Some(Addr::unchecked("new_gov")),
         };
         let _info = mock_info("creator", &[]);
@@ -119,15 +119,15 @@ mod tests {
             SeilorConfigResponse {
                 max_supply,
                 gov: Addr::unchecked("new_gov"),
-                seilor_fund: Addr::unchecked("new_seilor_fund"),
-                seilor_distribute: Addr::unchecked("new_seilor_distribute"),
+                fund: Addr::unchecked("new_fund"),
+                distribute: Addr::unchecked("new_distribute"),
             }
         );
 
         // Verify old gov with insufficient permissions
         let _msg = ExecuteMsg::UpdateConfig {
-            seilor_fund: Some(Addr::unchecked("new_seilor_fund")),
-            seilor_distribute: Some(Addr::unchecked("new_seilor_distribute")),
+            fund: Some(Addr::unchecked("new_fund")),
+            distribute: Some(Addr::unchecked("new_distribute")),
             gov: Some(Addr::unchecked("new_gov")),
         };
         let _info = mock_info("creator", &[]);
@@ -157,9 +157,14 @@ mod tests {
             msg: None,
         };
         let _info = mock_info("creator", &[]);
-        let _res = execute(deps.as_mut(), mock_env(), _info, _msg);
+        let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap_err();
         match _res {
-            Err(ContractError::Unauthorized {}) => {}
+            ContractError::Std(GenericErr { msg, .. }) => {
+                assert_eq!(
+                    msg,
+                    "Fund or distribute contract must to be configured".to_string()
+                )
+            }
             _ => panic!("Do not enter in"),
         }
 
@@ -170,16 +175,21 @@ mod tests {
             msg: None,
         };
         let _info = mock_info("random_user", &[]);
-        let _res = execute(deps.as_mut(), mock_env(), _info, _msg);
+        let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap_err();
         match _res {
-            Err(ContractError::Unauthorized {}) => {}
-            _ => panic!("Mint Contract Not Config"),
+            ContractError::Std(GenericErr { msg, .. }) => {
+                assert_eq!(
+                    msg,
+                    "Fund or distribute contract must to be configured".to_string()
+                )
+            }
+            _ => panic!("Do not enter in"),
         }
 
         // proper update config
         let _msg = ExecuteMsg::UpdateConfig {
-            seilor_fund: Some(Addr::unchecked("new_seilor_fund".to_string())),
-            seilor_distribute: Some(Addr::unchecked("new_seilor_distribute".to_string())),
+            fund: Some(Addr::unchecked("new_fund".to_string())),
+            distribute: Some(Addr::unchecked("new_distribute".to_string())),
             gov: Some(Addr::unchecked("new_gov".to_string())),
         };
         let _info = mock_info("creator", &[]);
@@ -220,7 +230,7 @@ mod tests {
             contract: None,
             msg: None,
         };
-        let _info = mock_info("new_seilor_fund", &[]);
+        let _info = mock_info("new_fund", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap();
         assert_eq!(0, _res.messages.len());
 
@@ -232,7 +242,7 @@ mod tests {
             contract: None,
             msg: None,
         };
-        let _info = mock_info("new_seilor_distribute", &[]);
+        let _info = mock_info("new_distribute", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap();
         assert_eq!(0, _res.messages.len());
 
@@ -253,8 +263,8 @@ mod tests {
 
         // proper update config
         let _msg = ExecuteMsg::UpdateConfig {
-            seilor_fund: Some(Addr::unchecked("new_seilor_fund".to_string())),
-            seilor_distribute: Some(Addr::unchecked("new_seilor_distribute".to_string())),
+            fund: Some(Addr::unchecked("new_fund".to_string())),
+            distribute: Some(Addr::unchecked("new_distribute".to_string())),
             gov: Some(Addr::unchecked("creator".to_string())),
         };
         let _info = mock_info("creator", &[]);
@@ -268,7 +278,7 @@ mod tests {
             contract: None,
             msg: None,
         };
-        let _info = mock_info("new_seilor_fund", &[]);
+        let _info = mock_info("new_fund", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap();
         assert_eq!(0, _res.messages.len());
 
@@ -290,7 +300,7 @@ mod tests {
             user: "lucky".to_string(),
             amount,
         };
-        let _info = mock_info("new_seilor_distribute", &[]);
+        let _info = mock_info("new_distribute", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg);
         match _res {
             Err(ContractError::Unauthorized {}) => {}
@@ -302,7 +312,7 @@ mod tests {
             user: "lucky".to_string(),
             amount,
         };
-        let _info = mock_info("new_seilor_fund", &[]);
+        let _info = mock_info("new_fund", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap();
         assert_eq!(0, _res.messages.len());
 

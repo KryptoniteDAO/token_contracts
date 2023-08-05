@@ -3,12 +3,18 @@
   "title": "SeilorConfigResponse",
   "type": "object",
   "required": [
+    "distribute",
+    "fund",
     "gov",
-    "max_supply",
-    "seilor_distribute",
-    "seilor_fund"
+    "max_supply"
   ],
   "properties": {
+    "distribute": {
+      "$ref": "#/definitions/Addr"
+    },
+    "fund": {
+      "$ref": "#/definitions/Addr"
+    },
     "gov": {
       "$ref": "#/definitions/Addr"
     },
@@ -16,12 +22,6 @@
       "type": "integer",
       "format": "uint128",
       "minimum": 0.0
-    },
-    "seilor_distribute": {
-      "$ref": "#/definitions/Addr"
-    },
-    "seilor_fund": {
-      "$ref": "#/definitions/Addr"
     }
   },
   "additionalProperties": false,

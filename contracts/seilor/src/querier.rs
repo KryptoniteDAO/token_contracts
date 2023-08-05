@@ -6,8 +6,8 @@ pub fn query_seilor_config(deps: Deps) -> StdResult<SeilorConfigResponse> {
     let config: SeilorConfig = read_seilor_config(deps.storage)?;
     Ok(SeilorConfigResponse {
         max_supply: config.max_supply,
-        seilor_fund: config.seilor_fund,
-        seilor_distribute: config.seilor_distribute,
+        fund: config.fund,
+        distribute: config.distribute,
         gov: config.gov,
     })
 }

@@ -15,9 +15,9 @@ pub struct InstantiateMsg {
 #[cw_serde]
 pub enum ExecuteMsg {
     UpdateConfig {
-        seilor_fund: Option<Addr>,
+        fund: Option<Addr>,
         gov: Option<Addr>,
-        seilor_distribute: Option<Addr>,
+        distribute: Option<Addr>,
     },
     Mint {
         recipient: String,
@@ -151,8 +151,8 @@ pub enum SeilorFundMsg {
 #[cw_serde]
 pub struct SeilorConfigResponse {
     pub max_supply: u128,
-    pub seilor_fund: Addr,
-    pub seilor_distribute: Addr,
+    pub fund: Addr,
+    pub distribute: Addr,
     pub gov: Addr,
 }
 

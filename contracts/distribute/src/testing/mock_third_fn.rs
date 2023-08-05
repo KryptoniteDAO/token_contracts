@@ -1,4 +1,4 @@
-pub fn mock_kpt_instantiate_msg() -> seilor::msg::InstantiateMsg {
+pub fn mock_seilor_instantiate_msg() -> seilor::msg::InstantiateMsg {
     let max_supply = 1000000000000000u128;
     let cw20_init_msg = cw20_base::msg::InstantiateMsg {
         name: "seilor dev".to_string(),

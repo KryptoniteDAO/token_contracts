@@ -59,9 +59,9 @@ pub fn instantiate(
 
     let seilor_config = SeilorConfig {
         max_supply: msg.max_supply,
-        seilor_fund: Addr::unchecked(""),
+        fund: Addr::unchecked(""),
         gov,
-        seilor_distribute: Addr::unchecked(""),
+        distribute: Addr::unchecked(""),
     };
 
     store_seilor_config(deps.storage, &seilor_config)?;
@@ -80,10 +80,10 @@ pub fn execute(
 ) -> Result<Response, ContractError> {
     match msg {
         ExecuteMsg::UpdateConfig {
-            seilor_fund,
+            fund,
             gov,
-            seilor_distribute,
-        } => update_config(deps, info, seilor_fund, gov, seilor_distribute),
+            distribute,
+        } => update_config(deps, info, fund, gov, distribute),
         ExecuteMsg::Mint {
             recipient,
             amount,

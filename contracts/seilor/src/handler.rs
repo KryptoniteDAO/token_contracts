@@ -8,9 +8,9 @@ use cw20_base::contract::{execute_burn, execute_mint};
 pub fn update_config(
     deps: DepsMut,
     info: MessageInfo,
-    seilor_fund: Option<Addr>,
+    fund: Option<Addr>,
     gov: Option<Addr>,
-    seilor_distribute: Option<Addr>,
+    distribute: Option<Addr>,
 ) -> Result<Response, ContractError> {
     let mut seilor_config = read_seilor_config(deps.storage)?;
 
@@ -23,17 +23,17 @@ pub fn update_config(
         attr("sender", info.sender.to_string()),
     ];
 
-    if let Some(seilor_fund) = seilor_fund {
-        seilor_config.seilor_fund = seilor_fund.clone();
-        attrs.push(attr("seilor_fund", seilor_fund.to_string()));
+    if let Some(fund) = fund {
+        seilor_config.fund = fund.clone();
+        attrs.push(attr("fund", fund.to_string()));
     }
     if let Some(gov) = gov {
         seilor_config.gov = gov.clone();
         attrs.push(attr("gov", gov.to_string()));
     }
-    if let Some(seilor_distribute) = seilor_distribute {
-        seilor_config.seilor_distribute = seilor_distribute.clone();
-        attrs.push(attr("seilor_distribute", seilor_distribute.to_string()));
+    if let Some(distribute) = distribute {
+        seilor_config.distribute = distribute.clone();
+        attrs.push(attr("distribute", distribute.to_string()));
     }
 
     store_seilor_config(deps.storage, &seilor_config)?;
@@ -52,14 +52,14 @@ pub fn mint(
 ) -> Result<Response, ContractError> {
     let msg_sender = info.sender;
     let seilor_config = read_seilor_config(deps.storage)?;
-    let seilor_fund = seilor_config.seilor_fund;
-    let seilor_distribute = seilor_config.seilor_distribute;
+    let fund = seilor_config.fund;
+    let distribute = seilor_config.distribute;
 
-    if is_empty_str(seilor_fund.as_str()) && is_empty_str(seilor_distribute.as_str()) {
-        return Err(ContractError::Std(StdError::generic_err("mint contract not configured")));
+    if is_empty_str(fund.as_str()) && is_empty_str(distribute.as_str()) {
+        return Err(ContractError::Std(StdError::generic_err("Fund or distribute contract must to be configured")));
     }
 
-    if msg_sender.ne(&seilor_fund.clone()) && msg_sender.ne(&seilor_distribute) {
+    if msg_sender.ne(&fund.clone()) && msg_sender.ne(&distribute) {
         return Err(ContractError::Unauthorized {});
     }
 
@@ -108,9 +108,9 @@ pub fn burn(
 ) -> Result<Response, ContractError> {
     let seilor_config = read_seilor_config(deps.storage)?;
     let msg_sender = info.sender;
-    let seilor_fund = seilor_config.seilor_fund;
+    let fund = seilor_config.fund;
 
-    if msg_sender != seilor_fund.clone() {
+    if msg_sender != fund.clone() {
         return Err(ContractError::Unauthorized {});
     }
 

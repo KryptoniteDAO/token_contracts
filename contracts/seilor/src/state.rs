@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct SeilorConfig {
     pub max_supply: u128,
-    pub seilor_fund: Addr,
+    pub fund: Addr,
     pub gov: Addr,
-    pub seilor_distribute: Addr,
+    pub distribute: Addr,
 }
 
 const SEILOR_CONFIG: Item<SeilorConfig> = Item::new("seilor_config");
