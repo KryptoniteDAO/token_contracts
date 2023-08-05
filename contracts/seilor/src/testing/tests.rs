@@ -3,8 +3,8 @@ mod tests {
 
     use crate::contract::{execute, instantiate};
     use cw20_base::ContractError;
-    use crate::msg::{ExecuteMsg, InstantiateMsg, KptConfigResponse};
-    use crate::querier::query_kpt_config;
+    use crate::msg::{ExecuteMsg, InstantiateMsg, SeilorConfigResponse};
+    use crate::querier::query_seilor_config;
     use cosmwasm_std::testing::{
         mock_dependencies, mock_dependencies_with_balance, mock_env, mock_info,
     };
@@ -58,12 +58,12 @@ mod tests {
 
         // Verify the KptConfig is stored correctly
         assert_eq!(
-            query_kpt_config(deps.as_ref()).unwrap(),
-            KptConfigResponse {
+            query_seilor_config(deps.as_ref()).unwrap(),
+            SeilorConfigResponse {
                 max_supply,
                 gov: Addr::unchecked("gov"),
-                kpt_fund: Addr::unchecked(""),
-                kpt_distribute: Addr::unchecked(""),
+                seilor_fund: Addr::unchecked(""),
+                seilor_distribute: Addr::unchecked(""),
             }
         );
     }
@@ -81,8 +81,8 @@ mod tests {
 
         // Negative test case with insufficient permissions
         let _msg = ExecuteMsg::UpdateConfig {
-            kpt_fund: Some(Addr::unchecked("new_seilor_fund")),
-            kpt_distribute: Some(Addr::unchecked("new_seilor_distribute")),
+            seilor_fund: Some(Addr::unchecked("new_seilor_fund")),
+            seilor_distribute: Some(Addr::unchecked("new_seilor_distribute")),
             gov: Some(Addr::unchecked("new_gov")),
         };
         let _info = mock_info("random_user", &[]);
@@ -94,19 +94,19 @@ mod tests {
 
         // Verify that the config values remain unchanged
         assert_eq!(
-            query_kpt_config(deps.as_ref()).unwrap(),
-            KptConfigResponse {
+            query_seilor_config(deps.as_ref()).unwrap(),
+            SeilorConfigResponse {
                 max_supply,
                 gov: Addr::unchecked("creator"),
-                kpt_fund: Addr::unchecked(""),
-                kpt_distribute: Addr::unchecked(""),
+                seilor_fund: Addr::unchecked(""),
+                seilor_distribute: Addr::unchecked(""),
             }
         );
 
         // Positive test case
         let _msg = ExecuteMsg::UpdateConfig {
-            kpt_fund: Some(Addr::unchecked("new_seilor_fund")),
-            kpt_distribute: Some(Addr::unchecked("new_seilor_distribute")),
+            seilor_fund: Some(Addr::unchecked("new_seilor_fund")),
+            seilor_distribute: Some(Addr::unchecked("new_seilor_distribute")),
             gov: Some(Addr::unchecked("new_gov")),
         };
         let _info = mock_info("creator", &[]);
@@ -115,19 +115,19 @@ mod tests {
 
         // Verify the updated values in the storage
         assert_eq!(
-            query_kpt_config(deps.as_ref()).unwrap(),
-            KptConfigResponse {
+            query_seilor_config(deps.as_ref()).unwrap(),
+            SeilorConfigResponse {
                 max_supply,
                 gov: Addr::unchecked("new_gov"),
-                kpt_fund: Addr::unchecked("new_seilor_fund"),
-                kpt_distribute: Addr::unchecked("new_seilor_distribute"),
+                seilor_fund: Addr::unchecked("new_seilor_fund"),
+                seilor_distribute: Addr::unchecked("new_seilor_distribute"),
             }
         );
 
         // Verify old gov with insufficient permissions
         let _msg = ExecuteMsg::UpdateConfig {
-            kpt_fund: Some(Addr::unchecked("new_seilor_fund")),
-            kpt_distribute: Some(Addr::unchecked("new_seilor_distribute")),
+            seilor_fund: Some(Addr::unchecked("new_seilor_fund")),
+            seilor_distribute: Some(Addr::unchecked("new_seilor_distribute")),
             gov: Some(Addr::unchecked("new_gov")),
         };
         let _info = mock_info("creator", &[]);
@@ -178,15 +178,15 @@ mod tests {
 
         // proper update config
         let _msg = ExecuteMsg::UpdateConfig {
-            kpt_fund: Some(Addr::unchecked("new_seilor_fund".to_string())),
-            kpt_distribute: Some(Addr::unchecked("new_seilor_distribute".to_string())),
+            seilor_fund: Some(Addr::unchecked("new_seilor_fund".to_string())),
+            seilor_distribute: Some(Addr::unchecked("new_seilor_distribute".to_string())),
             gov: Some(Addr::unchecked("new_gov".to_string())),
         };
         let _info = mock_info("creator", &[]);
         let _res = execute(deps.as_mut(), mock_env(), _info, _msg).unwrap();
         assert_eq!(0, _res.messages.len());
 
-        // Negative test case with insufficient permissions, only kpt_fund && kpt_distribute
+        // Negative test case with insufficient permissions, only seilor_fund && seilor_distribute
         let _msg = ExecuteMsg::Mint {
             recipient: "lucky".to_string(),
             amount,
@@ -213,7 +213,7 @@ mod tests {
             _ => panic!("Must return unauthorized error"),
         }
 
-        // Positive test case, only kpt_fund && kpt_distribute
+        // Positive test case, only seilor_fund && seilor_distribute
         let _msg = ExecuteMsg::Mint {
             recipient: "lucky".to_string(),
             amount,
@@ -253,8 +253,8 @@ mod tests {
 
         // proper update config
         let _msg = ExecuteMsg::UpdateConfig {
-            kpt_fund: Some(Addr::unchecked("new_seilor_fund".to_string())),
-            kpt_distribute: Some(Addr::unchecked("new_seilor_distribute".to_string())),
+            seilor_fund: Some(Addr::unchecked("new_seilor_fund".to_string())),
+            seilor_distribute: Some(Addr::unchecked("new_seilor_distribute".to_string())),
             gov: Some(Addr::unchecked("creator".to_string())),
         };
         let _info = mock_info("creator", &[]);
@@ -274,7 +274,7 @@ mod tests {
 
         assert_eq!(get_balance(deps.as_ref(), "lucky"), Uint128::new(112233));
 
-        // Negative test case with insufficient permissions, only kpt_fund
+        // Negative test case with insufficient permissions, only seilor_fund
         let _msg = ExecuteMsg::Burn {
             user: "lucky".to_string(),
             amount,
@@ -297,7 +297,7 @@ mod tests {
             _ => panic!("Must return unauthorized error"),
         }
 
-        // Positive test case, only kpt_fund
+        // Positive test case, only seilor_fund
         let _msg = ExecuteMsg::Burn {
             user: "lucky".to_string(),
             amount,
