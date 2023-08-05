@@ -1,22 +1,22 @@
-# KPT Tokenomics
+# SEILOR Tokenomics
 
 kryptonite is an open-source DAO (Decentralized Autonomous Organization) project. kryptonite is managed by people around
-the world who hold its governance token, KPT. Through a governance system involving Executive Voting and Governance
-Polling, KPT holders can influence the direction of the protocol. The kryptonite (KPT) Token is the native token
+the world who hold its governance token, SEILOR. Through a governance system involving Executive Voting and Governance
+Polling, SEILOR holders can influence the direction of the protocol. The kryptonite (SEILOR) Token is the native token
 powering the kryptonite Protocol. Its utility comprises all core network functionalities, such as staking, governance,
-mint, and liquidators rewards. KPT is an ERC-20 governance token with a maximum supply of 100,000,000. KPT holders
+mint, and liquidators rewards. SEILOR is an ERC-20 governance token with a maximum supply of 100,000,000. SEILOR holders
 manage the kryptonite Protocol and the financial risks of eUSD to ensure its stability, transparency, and efficiency.
-KPT voting weight is proportional to the amount of KPT a voter stakes in the voting contract. In other words, the more
-KPT tokens locked in the contract, the greater the voter’s decision-making power.
+SEILOR voting weight is proportional to the amount of SEILOR a voter stakes in the voting contract. In other words, the more
+SEILOR tokens locked in the contract, the greater the voter’s decision-making power.
 
 ## Config
 
 | Key| Type| Description                                                       |
 | :--- | :--- |:------------------------------------------------------------------|
-| `max_supply` | `u128` | KPT max supply                                                    |
-| `kpt_fund` | `Addr` | KPT FUND module contract address (Possess mint permissions)       |
+| `max_supply` | `u128` | SEILOR max supply                                                    |
+| `seilor_fund` | `Addr` | SEILOR FUND module contract address (Possess mint permissions)       |
 | `gov` | `Addr` | Address of contract owner that can update config                  |
-| `kpt_distribute` | `Addr` | KPT DISTRIBUTE module contract address (Possess mint permissions) |
+| `seilor_distribute` | `Addr` | SEILOR DISTRIBUTE module contract address (Possess mint permissions) |
 
 ## InstantiateMsg {.tabset}
 
@@ -38,7 +38,7 @@ pub struct InstantiateMsg {
 {
   "cw20_init_msg": {
     "name": "Kryptonite",
-    "symbol": "KPT",
+    "symbol": "SEILOR",
     "decimals": 18,
     "initial_balances": [],
     "mint": null,
@@ -52,7 +52,7 @@ pub struct InstantiateMsg {
 | Key| Type| Description|
 | :--- | :--- | :--- |
 | `cw20_init_msg` | `Cw20InstantiateMsg` | The cw20 initialization message structure based on the cw20_base library |
-| `max_supply` | `u128` | KPT max supply |
+| `max_supply` | `u128` | SEILOR max supply |
 | `gov` | `Addr`* | Address of contract owner that can update config. If not filled in, it is the initialization call address |
 
 * = optional
@@ -69,9 +69,9 @@ Updates the configuration of the contract. Can only be issued by the owner.
 #[cw_serde]
 pub enum ExecuteMsg {
     UpdateConfig {
-        kpt_fund: Option<Addr>,
+        seilor_fund: Option<Addr>,
         gov: Option<Addr>,
-        kpt_distribute: Option<Addr>,
+        seilor_distribute: Option<Addr>,
     }
 }
 ```
@@ -81,18 +81,18 @@ pub enum ExecuteMsg {
 ```json
 {
   "update_config": {
-    "kpt_fund": null,
+    "seilor_fund": null,
     "gov": null,
-    "kpt_distribute": null
+    "seilor_distribute": null
   }
 }
 ```
 
 | Key| Type| Description|
 | :--- | :--- | :--- |
-| `kpt_fund`* | `Addr` | KPT FUND module contract address (Possess mint permissions) |
+| `seilor_fund`* | `Addr` | SEILOR FUND module contract address (Possess mint permissions) |
 | `gov`* | `Addr` | Address of contract owner that can update config |
-| `kpt_distribute`* | `Addr` | KPT token contract address (Possess mint permissions) |
+| `seilor_distribute`* | `Addr` | SEILOR token contract address (Possess mint permissions) |
 
 * = optional
 
@@ -510,7 +510,7 @@ pub enum ExecuteMsg {
 
 ### KptConfig {.tabset}
 
-Gets the KPT contract configuration.
+Gets the SEILOR contract configuration.
 
 #### Rust
 
@@ -540,8 +540,8 @@ pub enum QueryMsg {
 #[cw_serde]
 pub struct KptConfigResponse {
     pub max_supply: u128,
-    pub kpt_fund: Addr,
-    pub kpt_distribute: Addr,
+    pub seilor_fund: Addr,
+    pub seilor_distribute: Addr,
     pub gov: Addr,
 }
 ```
@@ -551,8 +551,8 @@ pub struct KptConfigResponse {
 ```json
 {
   "max_supply": "1000000000000000000000000000",
-  "kpt_fund": "sei...",
-  "kpt_distribute": "sei...",
+  "seilor_fund": "sei...",
+  "seilor_distribute": "sei...",
   "gov": "sei..."
 }
 ```
@@ -560,8 +560,8 @@ pub struct KptConfigResponse {
 | Key| Type| Description|
 | :--- | :--- | :--- |
 | `max_supply` | `u128` | Maximum supply |
-| `kpt_fund` | `Addr` | KPT fund address |
-| `kpt_distribute` | `Addr` | KPT distribute address |
+| `seilor_fund` | `Addr` | SEILOR fund address |
+| `seilor_distribute` | `Addr` | SEILOR distribute address |
 | `gov` | `Addr` | Governance address |
 
 ### Balance {.tabset}
@@ -658,8 +658,8 @@ pub struct TokenInfoResponse {
 
 ```json
 {
-  "name": "KPT",
-  "symbol": "KPT",
+  "name": "SEILOR",
+  "symbol": "SEILOR",
   "decimals": 18,
   "total_supply": "100000000000000000000000000"
 }

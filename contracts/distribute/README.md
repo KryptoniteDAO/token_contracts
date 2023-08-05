@@ -1,6 +1,6 @@
-# KPT Distribute
+# SEILOR Distribute
 
-kpt token allocation contract, which contains linear release of locks and warehouses. Including: loot box, team, sho,
+SEILOR token allocation contract, which contains linear release of locks and warehouses. Including: loot box, team, sho,
 dao, mm, reserve, airdrop, excluding ming, details to be determined.
 
 ## DistributeConfig
@@ -8,7 +8,7 @@ dao, mm, reserve, airdrop, excluding ming, details to be determined.
 | Key                  | Type   | Description                     |
 |----------------------|--------|---------------------------------|
 | `gov`                | `Addr` | Governance contract address     |
-| `total_amount`       | `u128` | Total amount of kpt             |
+| `total_amount`       | `u128` | Total amount of SEILOR             |
 | `distribute_token`   | `Addr` | Token address to be distributed |
 | `rules_total_amount` | `u128` | Total amount of rules           |
 
@@ -42,7 +42,7 @@ pub struct InstantiateMsg {
 | Key                | Type                             | Description                     |
 |--------------------|----------------------------------|---------------------------------|
 | `gov`              | `Addr`*                          | Governance contract address     |
-| `total_amount`     | `u128`                           | Total amount of kpt             |
+| `total_amount`     | `u128`                           | Total amount of SEILOR             |
 | `distribute_token` | `Addr`                           | Token address to be distributed |
 | `rule_configs_map` | `HashMap<String, RuleConfigMsg>` | Rule configuration map          |
 
@@ -100,7 +100,7 @@ pub struct RuleConfigMsg {
 
 ### Claim {.tabset}
 
-Claim the released kpt.
+Claim the released SEILOR.
 
 #### Rust
 

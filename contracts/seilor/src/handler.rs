@@ -68,24 +68,24 @@ pub fn mint(
         funds: vec![],
     };
 
-    let cw20_res = execute_mint(
+    let mut cw20_res = execute_mint(
         deps.branch(),
         env,
         sub_info,
         user.clone().to_string(),
         amount.clone(),
-    );
-    if cw20_res.is_err() {
-        return Err(ContractError::Std(StdError::generic_err(
-            cw20_res.err().unwrap().to_string(),
-        )));
-    }
+    )?;
+    // if cw20_res.is_err() {
+    //     return Err(ContractError::Std(StdError::generic_err(
+    //         cw20_res.err().unwrap().to_string(),
+    //     )));
+    // }
 
-    let mut res = cw20_res.unwrap();
+    // let mut res = cw20_res.unwrap();
 
     if let Some(contract) = contract {
         if let Some(msg) = msg {
-            res = res.add_message(
+            cw20_res = cw20_res.add_message(
                 Cw20MintReceiveMsg {
                     sender: msg_sender.into(),
                     amount,
@@ -96,7 +96,7 @@ pub fn mint(
         }
     }
 
-    Ok(res)
+    Ok(cw20_res)
 }
 
 pub fn burn(
