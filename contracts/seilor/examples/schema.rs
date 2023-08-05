@@ -1,6 +1,6 @@
 use cosmwasm_schema::write_api;
 
-use kpt::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use seilor::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
 fn main() {
     write_api! {

@@ -21,7 +21,7 @@
                 }
               ]
             },
-            "kpt_distribute": {
+            "seilor_distribute": {
               "anyOf": [
                 {
                   "$ref": "#/definitions/Addr"
@@ -31,7 +31,7 @@
                 }
               ]
             },
-            "kpt_fund": {
+            "seilor_fund": {
               "anyOf": [
                 {
                   "$ref": "#/definitions/Addr"
