@@ -55,7 +55,7 @@ pub fn get_winning(
     let random_number = _cal_random_number(&seed)?;
     let luck_num = random_number % mod_num;
     Ok(winning_num.contains(&luck_num))
-}
+}  
 
 #[cfg(test)]
 mod tests {
